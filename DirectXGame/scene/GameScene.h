@@ -10,6 +10,9 @@
 #include "ImGuiManager.h"
 #include "DebugCamera.h"
 #include "AxisIndicator.h"
+#include <cassert>
+#include <vector>
+#include "mt.h"
 
 /// <summary>
 /// ゲームシーン
@@ -48,17 +51,13 @@ private: // メンバ変数
 	Audio* audio_ = nullptr;
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr; 
+	bool isDebugCameraActive_ = false;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
-	//音声再生ハンドル
-	uint32_t soundDataHandle_ = 0;
-	uint32_t voiceHandle_ = 0;
-
-	// スプライト
-	Sprite* sprite_ = nullptr;
-	Model* model_ = nullptr;
+	// モデルデータ
+	Model* modelBlock_ = nullptr;
 
 	//ワールドトランスフォームの初期化
 	WorldTransform worldTransform_;
@@ -66,8 +65,8 @@ private: // メンバ変数
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	float imputFloat3[3] = {0, 0, 0};
-
+	//可変個配列
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	/// <summary>
 	/// ゲームシーン用

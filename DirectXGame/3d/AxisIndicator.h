@@ -62,7 +62,7 @@ private:
 	// DirectX基盤
 	DirectXCommon* dxCommon_ = nullptr;
 	// モデル
-	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> modelBlock_;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	// ワールドトランスフォーム
