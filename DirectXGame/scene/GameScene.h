@@ -7,8 +7,14 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "ImGuiManager.h"
+#include "AxisIndicator.h"
+#include "DebugCamera.h"
 #include "Player.h"
 #include "SkyDome.h"
+#include <vector>
+#include <cassert>
+#include "mt.h"
 
 /// <summary>
 /// ゲームシーン
@@ -46,6 +52,10 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	// デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
+	bool isDebugCameraActive_ = false;
+
 	//ビュープロジェクション
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
@@ -53,8 +63,18 @@ private: // メンバ変数
 	//天球
 	SkyDome* skyDome_ = nullptr;
 
-	//3Dモデル
+	//モデル
 	Model* modelSkyDome_ = nullptr;
+	Model* modelBlock_ = nullptr;
+	Model* model_ = nullptr;
+
+	uint32_t textureHandle_ = 0;
+
+	// プレイヤー生成
+	Player* player_ = nullptr;
+
+		// 可変個配列
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	/// <summary>
 	/// ゲームシーン用
