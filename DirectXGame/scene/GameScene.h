@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "SkyDome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -45,16 +46,15 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	//モデルデータ生成
-	uint32_t textureHandle_ = 0;
-	Model* model_ = nullptr;
-
 	//ビュープロジェクション
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
-	//プレイヤー生成
-	Player* player_ = nullptr;
+	//天球
+	SkyDome* skyDome_ = nullptr;
+
+	//3Dモデル
+	Model* modelSkyDome_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

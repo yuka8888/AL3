@@ -5,8 +5,7 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete model_;
-	delete player_;
+	delete skyDome_;
 }
 
 void GameScene::Initialize() {
@@ -15,22 +14,19 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("sample.png");
-
-	//3Dモデルの生成
-	model_ = Model::Create();
-
 	//ビュープロジェクションの初期化
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 
+	// 3Dモデルの作成
+	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
+
 	//プレイヤー
-	player_ = new Player();
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	skyDome_ = new SkyDome;
+	skyDome_->Initialize(modelSkyDome_, &viewProjection_);
 }
 
-void GameScene::Update() { player_->Update(); }
+void GameScene::Update() { skyDome_->Update(); }
 
 void GameScene::Draw() {
 
@@ -59,7 +55,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	player_->Draw();
+	skyDome_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
