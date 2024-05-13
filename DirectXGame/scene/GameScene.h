@@ -15,6 +15,7 @@
 #include <vector>
 #include <cassert>
 #include "mt.h"
+#include "MapChipField.h"
 
 /// <summary>
 /// ゲームシーン
@@ -47,6 +48,9 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	//マップチップからブロックを生成
+	void GenerateBlocks();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -75,6 +79,8 @@ private: // メンバ変数
 
 		// 可変個配列
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+
+	MapChipField* mapChipField_;
 
 	/// <summary>
 	/// ゲームシーン用
