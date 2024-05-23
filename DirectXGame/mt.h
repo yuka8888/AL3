@@ -1,6 +1,19 @@
-
 #pragma once
 #include <cmath>
+
+inline float easeInOutCubic(float x) {
+	return x < 0.5f ? 4.0f * x * x * x : 1 - pow(-2.0f * x + 2.0f, 3.0f) / 2.0f; }
+
+/// <summary>
+/// 線形補間
+/// </summary>
+/// <param name="a">始点</param>
+/// <param name="b">終点</param>
+/// <param name="t"></param>
+/// <returns></returns>
+inline float Lerp(const float& a, const float& b, float t) {
+	return t* a + (1.0f - t) * b; 
+}
 
 /// <summary>
 /// 行列の積
