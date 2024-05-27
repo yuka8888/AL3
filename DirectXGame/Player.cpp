@@ -52,6 +52,8 @@ void Player::Update() {
 			velocity_.y += acceleration.y;
 			velocity_.z += acceleration.z;
 
+			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+
 		} else {
 			velocity_.x *= (1.0f - kAttenuation);
 		}
@@ -126,3 +128,5 @@ void Player::Update() {
 }
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+
+WorldTransform Player::GetWorldTransform() const { return worldTransform_; }

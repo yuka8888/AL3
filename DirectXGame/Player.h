@@ -26,6 +26,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	WorldTransform GetWorldTransform() const;
+
 
 private:
 	//ワールド変換データ
