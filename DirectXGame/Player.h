@@ -42,11 +42,11 @@ private:
 	Vector3 velocity_ = {};
 
 	//加速度
-	static inline const float kAcceleration = 0.05f;
+	static inline const float kAcceleration = 0.04f;
 	//速度減衰率
-	static inline const float kAttenuation = 0.2f;
+	static inline const float kAttenuation = 0.3f;
 	//最高速度
-	static inline const float kLimitRunSpeed = 2.0f;
+	static inline const float kLimitRunSpeed = 1.0f;
 
 	// 左右
 	enum class LRDirection {
