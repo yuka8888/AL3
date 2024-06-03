@@ -61,8 +61,14 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
 
+	//カメラコントローラの初期化
+	movableArea_ = {17, 100, 9, 50};
 
-
+	cameraController_ = new CameraController;
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->SetMoveableArea(movableArea_);
+	cameraController_->Reset();
 }
 
 void GameScene::Update() {
@@ -86,6 +92,10 @@ void GameScene::Update() {
 		// 行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+	cameraController_->Update();
+	viewProjection_.matView = cameraController_->GetViewProjection().matView;
+	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+	viewProjection_.TransferMatrix();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

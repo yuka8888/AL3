@@ -16,6 +16,7 @@
 #include <cassert>
 #include "mt.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 
 /// <summary>
 /// ゲームシーン
@@ -81,6 +82,11 @@ private: // メンバ変数
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	MapChipField* mapChipField_;
+
+	//カメラコントローラ
+	CameraController* cameraController_ = nullptr;
+
+	Rect movableArea_ = {};
 
 	/// <summary>
 	/// ゲームシーン用

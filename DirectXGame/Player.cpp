@@ -37,14 +37,14 @@ void Player::Update() {
 
 				if (velocity_.x > 0.0f) {
 					velocity_.x *= (1.0f - kAttenuation);
-					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = 1.0f;
 				}
 				acceleration.x -= kAcceleration;
 
 				// 方向変換
 				if (lrDirection_ != LRDirection::KLeft) {
 					lrDirection_ = LRDirection::KLeft;
+					turnFirstRotationY_ = worldTransform_.rotation_.y;
+					turnTimer_ = 1.0f;
 				}
 			}
 			// 加速、減速
@@ -129,4 +129,4 @@ void Player::Update() {
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
 
-WorldTransform Player::GetWorldTransform() const { return worldTransform_; }
+WorldTransform& Player::GetWorldTransform() { return worldTransform_; }

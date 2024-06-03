@@ -26,7 +26,7 @@ public:
 	/// </summary>
 	void Draw();
 
-	WorldTransform GetWorldTransform() const;
+	WorldTransform& GetWorldTransform();
 
 
 private:
