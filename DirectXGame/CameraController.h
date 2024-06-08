@@ -16,7 +16,6 @@ public:
 	///	初期化
 	/// </summary>
 	void Initialize();
-
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -37,8 +36,15 @@ private:
 
 	Rect movableArea_ = {0, 100, 0, 100};
 
-	//カメラの目標座標
+	// カメラの目標座標
 	Vector3 targetCoordinates_ = {};
-	//座標補間割合
+	
+	// 座標補間割合
 	static inline const float kInterpolationRate_ = 0.5f;
+
+	//速度掛け算
+	static inline const float kVelocityBias = 3.0f;
+
+	//追従対象の各方向へのカメラ移動範囲
+	static inline const Rect margin = {-10, 10, -30, 5};
 };

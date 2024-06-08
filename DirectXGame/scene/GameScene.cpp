@@ -60,10 +60,10 @@ void GameScene::Initialize() {
 	// プレイヤー
 	player_ = new Player();
 	player_->Initialize(model_, textureHandle_, &viewProjection_, playerPosition);
-	player_->SetMapChipField(mapChipField_);
+	//player_->SetMapChipField(mapChipField_);
 
 	//カメラコントローラの初期化
-	movableArea_ = {17, 100, 9, 50};
+	movableArea_ = {17, 200, 9, 50};
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
