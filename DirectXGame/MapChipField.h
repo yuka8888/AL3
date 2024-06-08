@@ -12,6 +12,18 @@ struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
 };
 
+struct IndexSet {
+	uint32_t xIndex;
+	uint32_t yIndex;
+};
+
+struct Rect {
+	float left; //左端
+	float right; //右端
+	float bottom; //下端
+	float top; //上端
+};
+
 class MapChipField {
 public:
 	/// <summary>
@@ -41,6 +53,15 @@ public:
 	/// <returns></returns>
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
 
+	/// <summary>
+	/// 指定ブロックの全方向の教会の座標を求める
+	/// </summary>
+	/// <param name="xIndex"></param>
+	/// <param name="yIndex"></param>
+	/// <returns></returns>
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex); 
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
 	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; };
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; };
 
@@ -53,4 +74,5 @@ private:
 	static inline const uint32_t kNumBlockHorizontal = 100;
 
 	MapChipData mapChipData_;
+
 };

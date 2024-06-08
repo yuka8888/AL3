@@ -5,6 +5,14 @@ inline float easeInOutCubic(float x) {
 	return x < 0.5f ? 4.0f * x * x * x : 1 - pow(-2.0f * x + 2.0f, 3.0f) / 2.0f; }
 
 /// <summary>
+/// 三次元の加算
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <returns></returns>
+inline Vector3 Add(const Vector3& v1, const Vector3& v2) { return {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z}; }
+
+/// <summary>
 /// 線形補間
 /// </summary>
 /// <param name="a">始点</param>

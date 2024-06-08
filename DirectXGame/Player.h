@@ -8,6 +8,25 @@
 #include <algorithm>
 #include "mt.h"
 
+	// マップとの当たり判定情報
+struct CollisionMapInfo {
+	bool isCollideCeiling;
+	bool isLanded;
+	bool isCollideWall;
+	Vector3 move;
+};
+
+enum Corner {
+	kRightBottom, // 右下
+	kLeftBottom,  // 左下
+	kRightTop,    // 右上
+	kLeftTop,     // 左上
+
+	kNumCorner // 要素数
+};
+
+class MapChipField;
+
 class Player {
 public:
 
@@ -26,7 +45,30 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move(Vector3& velocity);
+
+	/// <summary>
+	/// マップ衝突判定
+	/// </summary>
+	/// <param name="info"></param>
+	void MapCollisionTop(CollisionMapInfo& info);
+
+	/// <summary>
+	/// 指定した角の座標
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="corner"></param>
+	/// <returns></returns>
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
+	
+	void IfHitCeiling(const )
+
 	WorldTransform& GetWorldTransform();
+
+	void SetMapChipField(MapChipField* mapChipField);
 
 
 private:
@@ -72,5 +114,13 @@ private:
 	static inline const float kJumpAcceleration = 2.0f;
 	//接地状態フラグ
 	bool onGround_ = true;
+
+	MapChipField* mapChipField_ = nullptr;
+
+	//キャラクターの当たり判定のサイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	static inline const float kBlank = 1.0f;
 };
 
