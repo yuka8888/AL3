@@ -28,6 +28,11 @@ public:
 
 	WorldTransform& GetWorldTransform();
 
+	void SetMapChipField(MapChipField* mapChipField);
+
+	const Vector3& GetVelocity() const { return velocity_; }
+
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
