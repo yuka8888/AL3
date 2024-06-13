@@ -46,6 +46,12 @@ public:
 	/// <param name="info"></param>
 	void MoveByMapCollisionResult(CollisionMapInfo& info);
 
+	/// <summary>
+	/// 接地状態の切り替え
+	/// </summary>
+	/// <param name="info"></param>
+	void SwitchingOnGround(const CollisionMapInfo& info);
+
 	void CeilingCollision(const CollisionMapInfo& info);
 
 	WorldTransform& GetWorldTransform();
@@ -103,13 +109,20 @@ private:
 	// ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 2.0f;
 
+	//着地時の速度減衰率
+	static inline const float kAttenuationLanding = 0.1f;
+
 	// 接地状態フラグ
 	bool onGround_ = true;
 
 	// マップチップフィールドによるフィールド
 	MapChipField* mapChipField_ = nullptr;
 
+	//余白
 	static inline const float kBlank = 0.1f;
+
+	//
+	static inline const float kAdjustLanding = 0.2f;
 
 	/// <summary>
 	/// マップ衝突判定
@@ -122,11 +135,11 @@ private:
 	/// </summary>
 	/// <param name="info"></param>
 	void MapCollisionTop(CollisionMapInfo& info);
-	///// <summary>
-	///// マップ衝突判定下方向
-	///// </summary>
-	///// <param name="info"></param>
-	//void MapCollisionBottom(CollisionMapInfo& info);
+	/// <summary>
+	/// マップ衝突判定下方向
+	/// </summary>
+	/// <param name="info"></param>
+	void MapCollisionBottom(CollisionMapInfo& info);
 	///// <summary>
 	///// マップ衝突判定左方向
 	///// </summary>
