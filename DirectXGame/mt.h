@@ -155,3 +155,12 @@ inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, c
 
 	return Multiply(Multiply(MakeScaleMatrix(scale), rotateXYZMatrix), MakeTranslateMatrix(translate));
 }
+
+inline Vector3 operator+(Vector3 num1, Vector3 num2) {
+	Vector3 result{};
+	result.x = num1.x + num2.x;
+	result.y = num1.y + num2.y;
+	result.z = num1.z + num2.z;
+
+	return result;
+}

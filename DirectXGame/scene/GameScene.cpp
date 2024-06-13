@@ -54,13 +54,13 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
 
-		// プレイヤーの座標をマップチップ番号で指定
+	// プレイヤーの座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 
 	// プレイヤー
 	player_ = new Player();
 	player_->Initialize(model_, textureHandle_, &viewProjection_, playerPosition);
-	//player_->SetMapChipField(mapChipField_);
+	player_->SetMapChipField(mapChipField_);
 
 	//カメラコントローラの初期化
 	movableArea_ = {17, 200, 9, 50};

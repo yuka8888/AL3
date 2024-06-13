@@ -21,7 +21,7 @@ void CameraController::Update() {
 	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, target_->GetWorldTransform().translation_.x + margin.left);
 	viewProjection_.translation_.x = std::min(viewProjection_.translation_.x, target_->GetWorldTransform().translation_.x + margin.right);
 	viewProjection_.translation_.y = std::max(viewProjection_.translation_.y, target_->GetWorldTransform().translation_.y + margin.bottom);
-	viewProjection_.translation_.y = std::max(viewProjection_.translation_.y, target_->GetWorldTransform().translation_.y + margin.top);
+	viewProjection_.translation_.y = std::min(viewProjection_.translation_.y, target_->GetWorldTransform().translation_.y + margin.top);
 
 	// 移動範囲宣言
 	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, movableArea_.left);

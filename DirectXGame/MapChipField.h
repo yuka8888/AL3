@@ -17,15 +17,17 @@ struct IndexSet {
 	uint32_t yIndex;
 };
 
-//struct Rect {
-//	float left; //左端
-//	float right; //右端
-//	float bottom; //下端
-//	float top; //上端
-//};
+struct Rect {
+	float left = 0.0f;
+	float right = 1.0f;
+	float bottom = 0.0f;
+	float top = 1.0f;
+};
+
 
 class MapChipField {
 public:
+
 	/// <summary>
 	/// 読み込み済みのデータ削除
 	/// </summary>
@@ -59,7 +61,7 @@ public:
 	/// <param name="xIndex"></param>
 	/// <param name="yIndex"></param>
 	/// <returns></returns>
-	//Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex); 
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex); 
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
 	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; };

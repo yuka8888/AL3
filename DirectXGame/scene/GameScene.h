@@ -83,7 +83,7 @@ private: // メンバ変数
 	// カメラコントローラ
 	CameraController* cameraController_ = nullptr;
 
-	Rect movableArea_ = {};
+	CameraController::Rect movableArea_ = {};
 
 	/// <summary>
 	/// ゲームシーン用

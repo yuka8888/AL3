@@ -3,15 +3,15 @@
 #include <ViewProjection.h>
 class Player;
 
-struct Rect {
-	float left = 0.0f;
-	float right = 1.0f;
-	float bottom = 0.0f;
-	float top = 1.0f;
-};
-
 class CameraController {
 public:
+	struct Rect {
+		float left = 0.0f;
+		float right = 1.0f;
+		float bottom = 0.0f;
+		float top = 1.0f;
+	};
+
 	/// <summary>
 	///	初期化
 	/// </summary>
@@ -38,13 +38,13 @@ private:
 
 	// カメラの目標座標
 	Vector3 targetCoordinates_ = {};
-	
+
 	// 座標補間割合
 	static inline const float kInterpolationRate_ = 0.5f;
 
-	//速度掛け算
+	// 速度掛け算
 	static inline const float kVelocityBias = 3.0f;
 
-	//追従対象の各方向へのカメラ移動範囲
+	// 追従対象の各方向へのカメラ移動範囲
 	static inline const Rect margin = {-10, 10, -30, 5};
 };
