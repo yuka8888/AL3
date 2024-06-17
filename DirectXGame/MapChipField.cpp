@@ -98,6 +98,8 @@ Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) {
 IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position) { 
 	IndexSet indexSet = {};
 	indexSet.xIndex = uint32_t((position.x + kBlockWidth / 2) / kBlockWidth);
-	indexSet.yIndex = uint32_t(kNumBlockVirtical - 1 - ((position.y + kBlockHeight / 2) / kBlockHeight));
+	float ypos = (position.y - kBlockHeight / 2);
+	float yIndex = (ypos / kBlockHeight);
+	indexSet.yIndex = uint32_t(kNumBlockVirtical - 1 - yIndex);
 	return indexSet; 
 }

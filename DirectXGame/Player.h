@@ -52,8 +52,6 @@ public:
 	/// <param name="info"></param>
 	void SwitchingOnGround(const CollisionMapInfo& info);
 
-	void CeilingCollision(const CollisionMapInfo& info);
-
 	WorldTransform& GetWorldTransform();
 
 	void SetMapChipField(MapChipField* mapChipField);
@@ -61,8 +59,8 @@ public:
 	const Vector3& GetVelocity() const;
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 1.8f;
-	static inline const float kHeight = 1.8f;
+	static inline const float kWidth = 1.9f;
+	static inline const float kHeight = 1.9f;
 
 private:
 	// ワールド変換データ
@@ -107,10 +105,13 @@ private:
 	// 最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 1.0f;
 	// ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 2.0f;
+	static inline const float kJumpAcceleration = 1.5f;
 
 	//着地時の速度減衰率
-	static inline const float kAttenuationLanding = 0.1f;
+	static inline const float kAttenuationLanding = 0.3f;
+
+	//着地時の速度減衰率
+	static inline const float kAttenuationWall = 0.5f;
 
 	// 接地状態フラグ
 	bool onGround_ = true;
@@ -119,10 +120,10 @@ private:
 	MapChipField* mapChipField_ = nullptr;
 
 	//余白
-	static inline const float kBlank = 0.1f;
+	static inline const float kBlank = 0.10f;
 
 	//
-	static inline const float kAdjustLanding = 0.2f;
+	static inline const float kAdjustLanding = 0.12f;
 
 	/// <summary>
 	/// マップ衝突判定
@@ -140,14 +141,26 @@ private:
 	/// </summary>
 	/// <param name="info"></param>
 	void MapCollisionBottom(CollisionMapInfo& info);
-	///// <summary>
-	///// マップ衝突判定左方向
-	///// </summary>
-	///// <param name="info"></param>
-	//void MapCollisionLeft(CollisionMapInfo& info);
-	///// <summary>
-	///// マップ衝突判定右方向
-	///// </summary>
-	///// <param name="info"></param>
-	//void MapCollisionRight(CollisionMapInfo& info);
+	/// <summary>
+	/// マップ衝突判定左方向
+	/// </summary>
+	/// <param name="info"></param>
+	void MapCollisionLeft(CollisionMapInfo& info);
+	/// <summary>
+	/// マップ衝突判定右方向
+	/// </summary>
+	/// <param name="info"></param>
+	void MapCollisionRight(CollisionMapInfo& info);
+
+	/// <summary>
+	/// 天井にふれている場合の処理
+	/// </summary>
+	/// <param name="info"></param>
+	void CeilingCollision(const CollisionMapInfo& info);
+
+	/// <summary>
+	/// かべにふれている場合の処理
+	/// </summary>
+	/// <param name="info"></param>
+	void WallCollision(const CollisionMapInfo& info);
 };
