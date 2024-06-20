@@ -300,7 +300,7 @@ void Player::MapCollisionLeft(CollisionMapInfo& info) {
 	// ブロックにヒット？
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 		// めり込み先ブロックの矩形範囲
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.velocity.x = std::max(0.0f, (rect.right - worldTransform_.translation_.x) - kWidth / 2 + kBlank);
