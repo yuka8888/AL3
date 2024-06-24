@@ -81,7 +81,7 @@ private:
 	static inline const float kAttenuation = 0.2f;
 
 	// 最高速度
-	static inline const float kLimitRunSpeed = 2.0f;
+	static inline const float kLimitRunSpeed = 1.0f;
 
 	// 左右
 	enum class LRDirection {
@@ -111,7 +111,7 @@ private:
 	static inline const float kAttenuationLanding = 0.3f;
 
 	//着地時の速度減衰率
-	static inline const float kAttenuationWall = 0.5f;
+	static inline const float kAttenuationWall = 0.3f;
 
 	// 接地状態フラグ
 	bool onGround_ = true;
@@ -120,7 +120,7 @@ private:
 	MapChipField* mapChipField_ = nullptr;
 
 	//余白
-	static inline const float kBlank = 0.10f;
+	static inline const float kBlank = 0.05f;
 
 	//
 	static inline const float kAdjustLanding = 0.12f;
@@ -156,11 +156,11 @@ private:
 	/// 天井にふれている場合の処理
 	/// </summary>
 	/// <param name="info"></param>
-	void CeilingCollision(const CollisionMapInfo& info);
+	void CeilingCollision( CollisionMapInfo& info);
 
 	/// <summary>
 	/// かべにふれている場合の処理
 	/// </summary>
 	/// <param name="info"></param>
-	void WallCollision(const CollisionMapInfo& info);
+	void WallCollision( CollisionMapInfo& info);
 };
