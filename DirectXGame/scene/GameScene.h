@@ -9,6 +9,7 @@
 #include "MapChipField.h"
 #include "Model.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "SkyDome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
@@ -70,10 +71,13 @@ private: // メンバ変数
 	Model* modelSkyDome_ = nullptr;
 	Model* modelBlock_ = nullptr;
 	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0;
+	Model* modelEnemy_ = nullptr;
 	
 	// プレイヤー生成
 	Player* player_ = nullptr;
+
+	//エネミー
+	Enemy* enemy_ = nullptr;
 	
 	// 可変個配列
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

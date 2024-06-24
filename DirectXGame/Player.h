@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position);
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
 	/// <summary>
 	/// 更新
@@ -69,8 +69,6 @@ private:
 	// モデル
 	Model* model_ = nullptr;
 
-	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
 

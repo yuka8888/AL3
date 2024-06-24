@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete skyDome_;
 	delete player_;
+	delete enemy_;
 
 	delete modelBlock_;
 	delete debugCamera_;
@@ -33,15 +34,13 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの作成
 	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
-	model_ = Model::Create();
+	model_ = Model::CreateFromOBJ("Player", true);
+	modelEnemy_ = Model::CreateFromOBJ("Player", true);
 	modelBlock_ = Model::Create();
 
 	// 天球
 	skyDome_ = new SkyDome;
 	skyDome_->Initialize(modelSkyDome_, &viewProjection_);
-
-	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("sample.png");
 	
 	// デバックカメラ
 	debugCamera_ = new DebugCamera(1024, 720);
@@ -59,8 +58,16 @@ void GameScene::Initialize() {
 
 	// プレイヤー
 	player_ = new Player();
-	player_->Initialize(model_, textureHandle_, &viewProjection_, playerPosition);
+	player_->Initialize(model_, &viewProjection_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
+
+
+	// エネミーの座標をマップチップ番号で指定
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8, 18);
+
+	//エネミー
+	enemy_ = new Enemy();
+	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
 	//カメラコントローラの初期化
 	movableArea_ = {17, 200, 9, 50};
@@ -75,6 +82,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	skyDome_->Update();
 	player_->Update();
+	enemy_->Update();
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -136,6 +144,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	skyDome_->Draw();
+	enemy_->Draw();
 	player_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

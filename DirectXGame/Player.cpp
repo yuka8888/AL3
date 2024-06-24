@@ -11,10 +11,9 @@ enum Corner {
 	kNumCorner // 要素数
 };
 
-void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position) {
+void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
 	model_ = model;
-	textureHandle_ = textureHandle;
 	viewProjection_ = viewProjection;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
@@ -60,7 +59,7 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_, *viewProjection_);
 }
 
 void Player::Move() {
