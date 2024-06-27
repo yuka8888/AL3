@@ -51,6 +51,9 @@ public: // メンバ関数
 	// マップチップからブロックを生成
 	void GenerateBlocks();
 
+	//すべての当たり判定を行う
+	void CheckAllCollisions();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -77,7 +80,8 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	//エネミー
-	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
+	int32_t enemyNum = 3;
 	
 	// 可変個配列
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

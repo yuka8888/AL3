@@ -33,7 +33,7 @@ void Player::Update() {
 	MapCollision(collisionMapChipInfo);
 
 	// 地面との当たり判定
-	SwitchingOnGround(collisionMapChipInfo);
+	SwitchToOnGround(collisionMapChipInfo);
 
 	// 判定結果を反映して移動
 	MoveByMapCollisionResult(collisionMapChipInfo);
@@ -50,7 +50,7 @@ void Player::Update() {
 		worldTransform_.rotation_.y = Lerp(turnFirstRotationY_, destinationRotationY, easeInOutCubic(turnTimer_));
 	}
 
-	//デバッグ
+	// デバッグ
 	ImGui::DragFloat3("player.velocity", &velocity_.x, 0.01f);
 	ImGui::DragFloat3("player.position", &worldTransform_.translation_.x, 0.01f);
 
@@ -58,9 +58,7 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Player::Draw() {
-	model_->Draw(worldTransform_, *viewProjection_);
-}
+void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
 
 void Player::Move() {
 
@@ -169,7 +167,7 @@ void Player::MapCollision(CollisionMapInfo& info) {
 	MapCollisionLeft(info);
 	MapCollisionRight(info);
 
-	 if ((info.isLanded || info.isCollideCeiling) && info.isContactWall) {
+	if ((info.isLanded || info.isCollideCeiling) && info.isContactWall) {
 		info.isLanded = false;
 		info.isCollideCeiling = false;
 
@@ -372,13 +370,13 @@ void Player::MapCollisionRight(CollisionMapInfo& info) {
 }
 
 void Player::MoveByMapCollisionResult(CollisionMapInfo& info) {
-	//velocity_ = info.velocity;
+	// velocity_ = info.velocity;
 	worldTransform_.translation_.x += info.velocity.x;
 	worldTransform_.translation_.y += info.velocity.y;
 	worldTransform_.translation_.z += info.velocity.z;
 }
 
-void Player::SwitchingOnGround(const CollisionMapInfo& info) {
+void Player::SwitchToOnGround(const CollisionMapInfo& info) {
 	// 自キャラが接地状態？
 	if (onGround_) {
 		// ジャンプ開始
@@ -434,15 +432,15 @@ void Player::SwitchingOnGround(const CollisionMapInfo& info) {
 	}
 }
 
-void Player::CeilingCollision( CollisionMapInfo& info) {
+void Player::CeilingCollision(CollisionMapInfo& info) {
 	// 天井に当たった？
 	if (info.isCollideCeiling) {
 		velocity_.y = 0;
 	}
 }
 
-void Player::WallCollision( CollisionMapInfo& info) {
-	 //壁接触による減速
+void Player::WallCollision(CollisionMapInfo& info) {
+	// 壁接触による減速
 	if (info.isContactWall) {
 		info.velocity.x *= (1.0f - kAttenuationWall);
 	}
@@ -450,6 +448,31 @@ void Player::WallCollision( CollisionMapInfo& info) {
 
 WorldTransform& Player::GetWorldTransform() { return worldTransform_; }
 
+Vector3 Player::GetWorldPosition() {
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
 void Player::SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 const Vector3& Player::GetVelocity() const { return velocity_; }
+
+void Player::OnCollision(const Enemy* enemy) {
+	enemy;
+	velocity_ = {0, 10, 0};
+}
+
+AABB Player::GetAABB() {
+	Vector3 worldPos = GetWorldPosition();
+	AABB aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}

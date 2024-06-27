@@ -6,6 +6,7 @@
 #include <cassert>
 #include <numbers>
 
+class Player;
 
 class Enemy {
 public:
@@ -24,6 +25,16 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 衝突応答
+	/// </summary>
+	/// <param name="player"></param>
+	void OnCollision(const Player* player);
+
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -32,6 +43,10 @@ private:
 	Model* model_ = nullptr;
 
 	ViewProjection* viewProjection_ = nullptr;
+
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 1.9f;
+	static inline const float kHeight = 1.9f;
 
 	//歩行の速さ
 	static inline const float kWalkSpeed_ = 0.05f;

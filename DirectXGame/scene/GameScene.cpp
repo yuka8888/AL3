@@ -7,7 +7,11 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete skyDome_;
 	delete player_;
-	delete enemy_;
+
+	// エネミー
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 
 	delete modelBlock_;
 	delete debugCamera_;
@@ -41,14 +45,14 @@ void GameScene::Initialize() {
 	// 天球
 	skyDome_ = new SkyDome;
 	skyDome_->Initialize(modelSkyDome_, &viewProjection_);
-	
+
 	// デバックカメラ
 	debugCamera_ = new DebugCamera(1024, 720);
 
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
-	//マップチップ
+	// マップチップ
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
@@ -61,15 +65,17 @@ void GameScene::Initialize() {
 	player_->Initialize(model_, &viewProjection_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
 
+	// エネミー
+	for (int32_t i = 0; i < enemyNum; ++i) {
+		// エネミーの座標をマップチップ番号で指定
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8 + i * 3, 18);
+		Enemy* newEnemy = new Enemy();
+		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
-	// エネミーの座標をマップチップ番号で指定
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8, 18);
+		enemies_.push_back(newEnemy);
+	}
 
-	//エネミー
-	enemy_ = new Enemy();
-	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
-
-	//カメラコントローラの初期化
+	// カメラコントローラの初期化
 	movableArea_ = {17, 200, 9, 50};
 
 	cameraController_ = new CameraController;
@@ -82,7 +88,10 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	skyDome_->Update();
 	player_->Update();
-	enemy_->Update();
+
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -114,6 +123,8 @@ void GameScene::Update() {
 			worldTransformBlock->UpdateMatrix();
 		}
 	}
+
+	CheckAllCollisions();
 }
 
 void GameScene::Draw() {
@@ -144,7 +155,9 @@ void GameScene::Draw() {
 	/// </summary>
 
 	skyDome_->Draw();
-	enemy_->Draw();
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 	player_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -187,7 +200,7 @@ void GameScene::GenerateBlocks() {
 		worldTransformBlocks_[i].resize(numBlockHorizonal);
 	}
 
-	//ブロックの生成
+	// ブロックの生成
 	for (uint32_t i = 0; i < numBlockVirtical; i++) {
 		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
@@ -199,6 +212,29 @@ void GameScene::GenerateBlocks() {
 			}
 		}
 	}
+}
 
+void GameScene::CheckAllCollisions() {
+#pragma region 自キャラと敵キャラの当たり判定
 
+	// 判定対象１と２の座標
+	AABB aabb1, aabb2;
+
+	// 自キャラの座標
+	aabb1 = player_->GetAABB();
+
+	// 自キャラと敵弾すべての当たり判定
+	for (Enemy* enemy : enemies_) {
+		// 敵弾の座標
+		aabb2 = enemy->GetAABB();
+
+		// AABB同士の交差判定
+		if (isCollision(aabb1, aabb2)) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision(enemy);
+			// 敵キャラの衝突時コールバックを呼び出す
+			enemy->OnCollision(player_);
+		}
+	}
+#pragma endregion
 }

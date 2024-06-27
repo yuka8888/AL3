@@ -9,6 +9,7 @@
 #include <numbers>
 
 class MapChipField;
+class Enemy;
 
 // マップとの当たり判定情報
 struct CollisionMapInfo {
@@ -18,6 +19,7 @@ struct CollisionMapInfo {
 
 	Vector3 velocity;
 };
+
 class Player {
 public:
 	/// <summary>
@@ -50,9 +52,20 @@ public:
 	/// 接地状態の切り替え
 	/// </summary>
 	/// <param name="info"></param>
-	void SwitchingOnGround(const CollisionMapInfo& info);
+	void SwitchToOnGround(const CollisionMapInfo& info);
+
+	/// <summary>
+	/// 衝突応答
+	/// </summary>
+	/// <returns></returns>
+	void OnCollision(const Enemy* enemy);
+
+	AABB GetAABB();
 
 	WorldTransform& GetWorldTransform();
+
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 	void SetMapChipField(MapChipField* mapChipField);
 
