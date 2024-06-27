@@ -464,7 +464,7 @@ const Vector3& Player::GetVelocity() const { return velocity_; }
 
 void Player::OnCollision(const Enemy* enemy) {
 	enemy;
-	velocity_ = {0, 10, 0};
+
 }
 
 AABB Player::GetAABB() {
