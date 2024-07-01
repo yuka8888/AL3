@@ -18,6 +18,8 @@ GameScene::~GameScene() {
 
 	delete mapChipField_;
 
+	delete deathParticles_;
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -41,6 +43,7 @@ void GameScene::Initialize() {
 	model_ = Model::CreateFromOBJ("Player", true);
 	modelEnemy_ = Model::CreateFromOBJ("Player", true);
 	modelBlock_ = Model::Create();
+	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
 
 	// 天球
 	skyDome_ = new SkyDome;
@@ -75,6 +78,10 @@ void GameScene::Initialize() {
 		enemies_.push_back(newEnemy);
 	}
 
+	//死んだときのパーティクル
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(modelDeathParticle_, &viewProjection_, playerPosition);
+
 	// カメラコントローラの初期化
 	movableArea_ = {17, 200, 9, 50};
 
@@ -88,6 +95,10 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	skyDome_->Update();
 	player_->Update();
+
+	if (deathParticles_) {
+		deathParticles_->Update();
+	}
 
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
@@ -159,6 +170,10 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 	player_->Draw();
+
+		if (deathParticles_) {
+		deathParticles_->Draw();
+	}
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {

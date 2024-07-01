@@ -17,6 +17,7 @@
 #include "mt.h"
 #include <cassert>
 #include <vector>
+#include "DeathParticles.h"
 
 /// <summary>
 /// ゲームシーン
@@ -75,6 +76,7 @@ private: // メンバ変数
 	Model* modelBlock_ = nullptr;
 	Model* model_ = nullptr;
 	Model* modelEnemy_ = nullptr;
+	Model* modelDeathParticle_ = nullptr;
 	
 	// プレイヤー生成
 	Player* player_ = nullptr;
@@ -82,6 +84,9 @@ private: // メンバ変数
 	//エネミー
 	std::list<Enemy*> enemies_;
 	int32_t enemyNum = 3;
+
+	//死んだときのパーティクル
+	DeathParticles* deathParticles_ = nullptr;
 	
 	// 可変個配列
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
