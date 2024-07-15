@@ -71,6 +71,9 @@ public:
 
 	const Vector3& GetVelocity() const;
 
+		// デスフラグのGetter
+	bool isDead() const;
+
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 1.9f;
 	static inline const float kHeight = 1.9f;
@@ -81,6 +84,9 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+
+	// デスフラグ
+	bool isDead_ = false;
 
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};

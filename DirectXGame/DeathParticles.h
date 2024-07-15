@@ -25,6 +25,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	bool IsFinished();
+
 private:
 	Model* model_ = nullptr;
 	ViewProjection* viewProjection_ = nullptr;

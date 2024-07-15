@@ -22,6 +22,7 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vect
 
 void Player::Update() {
 
+	
 	// 移動
 	Move();
 
@@ -464,7 +465,7 @@ const Vector3& Player::GetVelocity() const { return velocity_; }
 
 void Player::OnCollision(const Enemy* enemy) {
 	enemy;
-	velocity_ = {0, 10, 0};
+	isDead_ = true;
 }
 
 AABB Player::GetAABB() {
@@ -476,3 +477,5 @@ AABB Player::GetAABB() {
 
 	return aabb;
 }
+
+bool Player::isDead() const { return isDead_; }

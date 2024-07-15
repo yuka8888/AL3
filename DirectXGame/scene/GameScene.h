@@ -55,7 +55,25 @@ public: // メンバ関数
 	//すべての当たり判定を行う
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// フェースの切り替え処理
+	/// </summary>
+	void ChangePhase();
+
+	// デスフラグのセッター
+	bool IsFinished() const;
+
+
 private: // メンバ変数
+	//ゲームのフェーズ
+	enum class Phase {
+		kPlay, //ゲームプレイ
+		kDeath //デス演出
+	};
+
+	//ゲームの現在フェーズ
+	Phase phase_;
+
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
@@ -81,6 +99,9 @@ private: // メンバ変数
 	// プレイヤー生成
 	Player* player_ = nullptr;
 
+	//デスフラグ
+	bool isDead_ = false;
+
 	//エネミー
 	std::list<Enemy*> enemies_;
 	int32_t enemyNum = 3;
@@ -97,6 +118,9 @@ private: // メンバ変数
 	CameraController* cameraController_ = nullptr;
 
 	CameraController::Rect movableArea_ = {};
+
+	// 終了フラグ
+	bool finished_ = false;
 
 	/// <summary>
 	/// ゲームシーン用
