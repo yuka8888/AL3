@@ -1,18 +1,19 @@
 #pragma once
 #include "AxisIndicator.h"
+#include "DirectXCommon.h"
 #include "Sprite.h"
 #include "TextureManager.h"
-#include "DirectXCommon.h"
-
-//フェードの状態
-enum class Status {
-	None, //フェードなし
-	FadeIn, //フェードイン中
-	FadeOut, //フェードアウト中
-};
+#include "algorithm"
 
 class Fade {
 public:
+	// フェードの状態
+	enum class Status {
+		None,    // フェードなし
+		FadeIn,  // フェードイン中
+		FadeOut, // フェードアウト中
+	};
+
 	void Initialize();
 
 	void Update();
@@ -21,6 +22,12 @@ public:
 
 	void Start(Status status, float duration);
 
+	void Stop();
+
+	bool IsFinished() const;
+
+	Status GetStatus();
+
 private:
 	Sprite* sprite_ = nullptr;
 
@@ -28,10 +35,10 @@ private:
 
 	Status status_ = Status::None;
 
-	//フェードの持続時間
+	// フェードの持続時間
 	float duration_ = 0.0f;
 
-	//経過時間カウンター
+	// 経過時間カウンター
 	float counter_ = 0.0f;
 
 	uint32_t textureHandle_ = 0;

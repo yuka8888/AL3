@@ -21,6 +21,8 @@ GameScene::~GameScene() {
 	delete modelEnemy_;
 	delete modelDeathParticle_;
 
+	delete fade_;
+
 	delete debugCamera_;
 
 	delete mapChipField_;
@@ -97,6 +99,11 @@ void GameScene::Initialize() {
 	cameraController_->SetTarget(player_);
 	cameraController_->SetMoveableArea(movableArea_);
 	cameraController_->Reset();
+
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
+
 }
 
 void GameScene::Update() {
@@ -170,7 +177,7 @@ void GameScene::Update() {
 
 		break;
 	}
-
+	fade_->Update();
 	ChangePhase();
 }
 
@@ -222,6 +229,7 @@ void GameScene::Draw() {
 			}
 		}
 
+	fade_->Draw(commandList);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -233,7 +241,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -319,6 +326,16 @@ void GameScene::ChangePhase() {
 
 	case GameScene::Phase::kDeath:
 		if (deathParticles_ && deathParticles_->IsFinished()) {
+			//パーティクルを削除
+			delete deathParticles_;
+			deathParticles_ = nullptr;
+			delete modelDeathParticle_;
+			modelDeathParticle_ = nullptr;
+
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+		}
+
+		if (fade_->GetStatus() == Fade::Status::FadeOut && fade_->IsFinished()) {
 			finished_ = true;
 		}
 		break;

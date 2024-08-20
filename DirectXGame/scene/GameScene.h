@@ -18,6 +18,7 @@
 #include <cassert>
 #include <vector>
 #include "DeathParticles.h"
+#include "Fade.h"
 
 /// <summary>
 /// ゲームシーン
@@ -77,6 +78,8 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+
+	Fade* fade_ = nullptr;
 	
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;

@@ -18,6 +18,7 @@ void TitleScene::Initialize() {
 
 	fade_ = new Fade();
 	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 TitleScene::~TitleScene() {
@@ -30,6 +31,10 @@ void TitleScene::Update() {
 	fade_->Update();
 
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
+	}
+
+	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {	
 		finished_ = true;
 	}
 	viewProjection_.UpdateMatrix(); }
@@ -48,7 +53,8 @@ void TitleScene::Draw() {
 	/// </summary>
 
 	titleText->Draw();
-	//fade_->Draw(commandList);
+	
+	fade_->Draw(commandList);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

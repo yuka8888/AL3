@@ -12,6 +12,11 @@
 
 class TitleScene {
 public:
+	enum class Phase {
+		kFadeIn,
+		kMain,
+		kFadeOut,
+	};
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -48,4 +53,5 @@ private:
 	bool finished_ = false;
 
 	Fade* fade_ = nullptr;
+	Phase phase_ = Phase::kFadeIn;
 };
