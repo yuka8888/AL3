@@ -53,6 +53,9 @@ public: // メンバ関数
 	// マップチップからブロックを生成
 	void GenerateBlocks();
 
+	// マップチップから新しいブロックを生成
+	void NewGenerateBlock();
+
 	//すべての当たり判定を行う
 	void CheckAllCollisions();
 

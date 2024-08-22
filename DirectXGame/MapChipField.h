@@ -2,6 +2,10 @@
 #include "DirectXCommon.h"
 #include <assert.h>
 #include "Vector3.h"
+#include "Input.h"
+#include "ImGuiManager.h"
+#include "mt.h"
+#include "WorldTransform.h"
 
 enum class MapChipType {
 	kBlank,//空白
@@ -32,6 +36,11 @@ public:
 	/// 読み込み済みのデータ削除
 	/// </summary>
 	void ResetMapChipData();
+
+	/// <summary>
+	/// クリックされた場所にブロックを配置
+	/// </summary>
+	Vector2 ClickPositionIsBlock();
 
 	/// <summary>
 	/// ファイル読み込み
@@ -75,6 +84,11 @@ private:
 	static inline const uint32_t kNumBlockVirtical = 20;
 	static inline const uint32_t kNumBlockHorizontal = 100;
 
+	Vector2 clickPosition_ = {};
+	Vector2 worldClickIndex_ = {};
+
 	MapChipData mapChipData_;
 
+	float kWindowHeight = 720.0f;
+	float kWindowWidth = 1280.0f;
 };

@@ -1,6 +1,8 @@
 #pragma once
 #include <cmath>
 #include <assert.h>
+#include "Vector3.h"
+#include "Matrix4x4.h"
 
 struct AABB {
 	Vector3 min{};
@@ -8,7 +10,8 @@ struct AABB {
 };
 
     inline float easeInOutCubic(float x) {
-	return x < 0.5f ? 4.0f * x * x * x : 1 - pow(-2.0f * x + 2.0f, 3.0f) / 2.0f; }
+	return x < 0.5f ? 4.0f * x * x * x : 1 - pow(-2.0f * x + 2.0f, 3.0f) / 2.0f; 
+}
 
 /// <summary>
 /// 三次元の加算

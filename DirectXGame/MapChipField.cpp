@@ -19,6 +19,23 @@ void MapChipField::ResetMapChipData() {
 	}
 }
 
+Vector2 MapChipField::ClickPositionIsBlock() {
+	//画面をクリックしたら
+	if (Input::GetInstance()->IsTriggerMouse(0)) {
+		//クリックした場所を取得
+		clickPosition_ = Input::GetInstance()->GetMousePosition();
+		//ブロックの場所に変換
+		worldClickIndex_ = {clickPosition_.x / (kWindowWidth / 18), (clickPosition_.y / (kWindowHeight / 10)+ 10)};
+		mapChipData_.data[(uint32_t)worldClickIndex_.y][(uint32_t)worldClickIndex_.x] = MapChipType::kBlock;
+
+		return worldClickIndex_;
+	}
+	ImGui::DragFloat2("clickPosition", &clickPosition_.x, 0.01f);
+	ImGui::DragFloat3("clickPosition", &worldClickIndex_.x, 1.0f);
+	
+	return {-1, -1};
+}
+
 void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 	ResetMapChipData();
 

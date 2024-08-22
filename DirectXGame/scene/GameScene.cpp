@@ -147,6 +147,9 @@ void GameScene::Update() {
 			}
 		}
 
+		//クリックした場所にブロックを設置
+		NewGenerateBlock();
+
 		CheckAllCollisions();
 
 		break;
@@ -230,6 +233,7 @@ void GameScene::Draw() {
 		}
 
 	fade_->Draw(commandList);
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -272,6 +276,19 @@ void GameScene::GenerateBlocks() {
 				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
 		}
+	}
+}
+
+void GameScene::NewGenerateBlock() { 
+	//クリックしたマップチップ番号を取得
+	if (mapChipField_->ClickPositionIsBlock().x >= 0 && mapChipField_->ClickPositionIsBlock().y >= 0) {
+		//ブロックの生成
+		WorldTransform* worldTransform = new WorldTransform();
+		worldTransform->Initialize();
+		worldTransformBlocks_[(uint32_t)mapChipField_->ClickPositionIsBlock().y][(uint32_t)mapChipField_->ClickPositionIsBlock().x] = worldTransform;
+		worldTransformBlocks_[(uint32_t)mapChipField_->ClickPositionIsBlock().y][(uint32_t)mapChipField_->ClickPositionIsBlock().x]->translation_ =
+		    mapChipField_->GetMapChipPositionByIndex((uint32_t)mapChipField_->ClickPositionIsBlock().x, (uint32_t)mapChipField_->ClickPositionIsBlock().y);
+
 	}
 }
 
