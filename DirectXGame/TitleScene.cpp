@@ -13,8 +13,16 @@ void TitleScene::Initialize() {
 
 	//テキスト
 	titleText = new TitleText;
-	modelText = Model::CreateFromOBJ("TitleText", true);
-	titleText->Initialize(modelText, &viewProjection_);
+	modelText_ = Model::CreateFromOBJ("TitleText", true);
+	titleText->Initialize(modelText_, &viewProjection_);
+	
+	titleText2 = new TitleText2;
+	modelText2_ = Model::CreateFromOBJ("TitleText2", true);
+	titleText2->Initialize(modelText2_, &viewProjection_);
+
+	skyDome_ = new SkyDome;
+	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
+	skyDome_->Initialize(modelSkyDome_, &viewProjection_);
 
 	fade_ = new Fade();
 	fade_->Initialize();
@@ -24,10 +32,14 @@ void TitleScene::Initialize() {
 TitleScene::~TitleScene() {
 	delete fade_;
 	delete titleText;
+	delete titleText2;
+	delete skyDome_;
 }
 
 void TitleScene::Update() { 
 	titleText->Update();
+	titleText2->Update();
+	skyDome_->Update();
 	fade_->Update();
 
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
@@ -53,6 +65,8 @@ void TitleScene::Draw() {
 	/// </summary>
 
 	titleText->Draw();
+	titleText2->Draw();
+	skyDome_->Draw();
 	
 	fade_->Draw(commandList);
 

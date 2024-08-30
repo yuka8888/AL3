@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "Sprite.h"
 #include "TitleText.h"
+#include "TitleText2.h"
+#include "SkyDome.h"
 #include "Fade.h"
 
 
@@ -42,8 +44,12 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	Model* modelText = nullptr;
+	Model* modelText_ = nullptr;
+	Model* modelText2_ = nullptr;
+	Model* modelSkyDome_ = nullptr;
 	TitleText* titleText = nullptr;
+	TitleText2* titleText2 = nullptr;
+	SkyDome* skyDome_ = nullptr;
 
 	// ビュープロジェクション
 	WorldTransform worldTransform_;

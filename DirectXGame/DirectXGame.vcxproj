@@ -122,6 +122,7 @@
     <ClCompile Include="SkyDome.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TitleText.cpp" />
+    <ClCompile Include="TitleText2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="SkyDome.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleText.h" />
+    <ClInclude Include="TitleText2.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">

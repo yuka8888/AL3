@@ -7,7 +7,7 @@ void TitleText::Initialize(Model* model, ViewProjection* viewProjection) {
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = {8, 8, 8};
-	worldTransform_.translation_ = {-10, 0, 0};
+	worldTransform_.translation_ = {-20, 0, 0};
 
 }
 
