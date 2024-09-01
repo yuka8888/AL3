@@ -1,6 +1,6 @@
-#include "TitleScene.h"
+#include "ClearScene.h"
 
-void TitleScene::Initialize() {
+void ClearScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -11,14 +11,9 @@ void TitleScene::Initialize() {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 
-	//テキスト
-	titleText = new TitleText;
-	modelText_ = Model::CreateFromOBJ("TitleText", true);
-	titleText->Initialize(modelText_, &viewProjection_);
-	
-	titleText2 = new TitleText2;
-	modelText2_ = Model::CreateFromOBJ("TitleText2", true);
-	titleText2->Initialize(modelText2_, &viewProjection_);
+	clearText_ = new ClearText;
+	modelText_ = Model::CreateFromOBJ("ClearText", true);
+	clearText_->Initialize(modelText_, &viewProjection_);
 
 	skyDome_ = new SkyDome;
 	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
@@ -29,29 +24,30 @@ void TitleScene::Initialize() {
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
-TitleScene::~TitleScene() {
+ClearScene::~ClearScene() {
 	delete fade_;
-	delete titleText;
-	delete titleText2;
 	delete skyDome_;
+	delete modelSkyDome_;
+	delete modelText_;
+	delete clearText_;
 }
 
-void TitleScene::Update() { 
-	titleText->Update();
-	titleText2->Update();
+void ClearScene::Update() {
 	skyDome_->Update();
+	clearText_->Update();
 	fade_->Update();
 
 	if (!fade_->IsStart() && Input::GetInstance()->PushKey(DIK_SPACE)) {
 		fade_->Start(Fade::Status::FadeOut, 1.0f);
 	}
 
-	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {	
+	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {
 		finished_ = true;
 	}
-	viewProjection_.UpdateMatrix(); }
+	viewProjection_.UpdateMatrix();
+}
 
-void TitleScene::Draw() {
+void ClearScene::Draw() {
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -64,16 +60,14 @@ void TitleScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	titleText->Draw();
-	titleText2->Draw();
 	skyDome_->Draw();
-	
+	clearText_->Draw();
+
 	fade_->Draw(commandList);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
-
 }
 
-bool TitleScene::IsFinished() const { return finished_; }
+bool ClearScene::IsFinished() const { return finished_; }

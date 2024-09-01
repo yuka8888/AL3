@@ -7,6 +7,7 @@ namespace {
 std::map<std::string, MapChipType> mapChipTable = {
     {"0", MapChipType::kBlank},
     {"1", MapChipType::kBlock},
+    {"2", MapChipType::kGoal},
 };
 }
 
@@ -30,8 +31,8 @@ Vector2 MapChipField::ClickPositionIsBlock() {
 
 		return worldClickIndex_;
 	}
-	ImGui::DragFloat2("clickPosition", &clickPosition_.x, 0.01f);
-	ImGui::DragFloat3("clickPosition", &worldClickIndex_.x, 1.0f);
+	//ImGui::DragFloat2("clickPosition", &clickPosition_.x, 0.01f);
+	//ImGui::DragFloat3("clickPosition", &worldClickIndex_.x, 1.0f);
 	
 	return {-1, -1};
 }

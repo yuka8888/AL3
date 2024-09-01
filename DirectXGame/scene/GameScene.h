@@ -19,6 +19,7 @@
 #include <vector>
 #include "DeathParticles.h"
 #include "Fade.h"
+#include "Goal.h"
 
 /// <summary>
 /// ゲームシーン
@@ -67,12 +68,15 @@ public: // メンバ関数
 	// デスフラグのセッター
 	bool IsFinished() const;
 
+	bool IsGoal();
+
+	bool IsGameOver();
 
 private: // メンバ変数
 	//ゲームのフェーズ
 	enum class Phase {
 		kPlay, //ゲームプレイ
-		kDeath //デス演出
+		kDeath, //デス演出
 	};
 
 	//ゲームの現在フェーズ
@@ -101,6 +105,7 @@ private: // メンバ変数
 	Model* model_ = nullptr;
 	Model* modelEnemy_ = nullptr;
 	Model* modelDeathParticle_ = nullptr;
+	Model* modelGoal_ = nullptr;
 	
 	// プレイヤー生成
 	Player* player_ = nullptr;
@@ -111,6 +116,9 @@ private: // メンバ変数
 	//エネミー
 	std::list<Enemy*> enemies_;
 	int32_t enemyNum = 3;
+
+	//ゴール
+	Goal* goal_ = nullptr;
 
 	//死んだときのパーティクル
 	DeathParticles* deathParticles_ = nullptr;
@@ -127,6 +135,9 @@ private: // メンバ変数
 
 	// 終了フラグ
 	bool finished_ = false;
+	bool isGoal_ = false;
+	bool isGameOver_ = false;
+
 
 	/// <summary>
 	/// ゲームシーン用

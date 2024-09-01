@@ -1,6 +1,5 @@
-#include "TitleScene.h"
-
-void TitleScene::Initialize() {
+#include "GameOverScene.h"
+void GameOverScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -11,14 +10,13 @@ void TitleScene::Initialize() {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 
-	//テキスト
-	titleText = new TitleText;
-	modelText_ = Model::CreateFromOBJ("TitleText", true);
-	titleText->Initialize(modelText_, &viewProjection_);
-	
-	titleText2 = new TitleText2;
-	modelText2_ = Model::CreateFromOBJ("TitleText2", true);
-	titleText2->Initialize(modelText2_, &viewProjection_);
+	gameOverText_ = new GameOverText;
+	modelText_ = Model::CreateFromOBJ("GameOverText", true);
+	gameOverText_->Initialize(modelText_, &viewProjection_);
+
+	gameOverText2_ = new GameOverText;
+	modelText2_ = Model::CreateFromOBJ("GameOverText2", true);
+	gameOverText2_->Initialize(modelText2_, &viewProjection_);
 
 	skyDome_ = new SkyDome;
 	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
@@ -29,29 +27,33 @@ void TitleScene::Initialize() {
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
-TitleScene::~TitleScene() {
+GameOverScene::~GameOverScene() {
 	delete fade_;
-	delete titleText;
-	delete titleText2;
 	delete skyDome_;
+	delete modelSkyDome_;
+	delete modelText2_;
+	delete modelText_;
+	delete gameOverText_;
+	delete gameOverText2_;
 }
 
-void TitleScene::Update() { 
-	titleText->Update();
-	titleText2->Update();
+void GameOverScene::Update() {
 	skyDome_->Update();
 	fade_->Update();
+	gameOverText_->Update();
+	gameOverText2_->Update();
 
 	if (!fade_->IsStart() && Input::GetInstance()->PushKey(DIK_SPACE)) {
 		fade_->Start(Fade::Status::FadeOut, 1.0f);
 	}
 
-	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {	
+	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {
 		finished_ = true;
 	}
-	viewProjection_.UpdateMatrix(); }
+	viewProjection_.UpdateMatrix();
+}
 
-void TitleScene::Draw() {
+void GameOverScene::Draw() {
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -64,16 +66,15 @@ void TitleScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	titleText->Draw();
-	titleText2->Draw();
 	skyDome_->Draw();
-	
+	gameOverText_->Draw();
+	gameOverText2_->Draw();
+
 	fade_->Draw(commandList);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
-
 }
 
-bool TitleScene::IsFinished() const { return finished_; }
+bool GameOverScene::IsFinished() const { return finished_; }

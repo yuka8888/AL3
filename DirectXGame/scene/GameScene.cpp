@@ -29,6 +29,8 @@ GameScene::~GameScene() {
 
 	delete deathParticles_;
 
+	delete goal_;
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -42,6 +44,8 @@ void GameScene::Initialize() {
 	phase_ = Phase::kPlay;
 
 	finished_ = false;
+	isGoal_ = false;
+	isGameOver_ = false;
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -57,6 +61,7 @@ void GameScene::Initialize() {
 	modelEnemy_ = Model::CreateFromOBJ("Player", true);
 	modelBlock_ = Model::Create();
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
+	modelGoal_ = Model::CreateFromOBJ("Goal", true);
 
 	// 天球
 	skyDome_ = new SkyDome;
@@ -84,15 +89,19 @@ void GameScene::Initialize() {
 	// エネミー
 	for (int32_t i = 0; i < enemyNum; ++i) {
 		// エネミーの座標をマップチップ番号で指定
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8 + i * 3, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12 + i * 3, 18);
 		Enemy* newEnemy = new Enemy();
 		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
 		enemies_.push_back(newEnemy);
 	}
 
+	// ゴール
+	goal_ = new Goal();
+	goal_->Initialize(modelGoal_, &viewProjection_);
+
 	// カメラコントローラの初期化
-	movableArea_ = {17, 200, 9, 50};
+	movableArea_ = {17, 17, 9, 50};
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
@@ -103,7 +112,6 @@ void GameScene::Initialize() {
 	fade_ = new Fade();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
-
 }
 
 void GameScene::Update() {
@@ -111,6 +119,7 @@ void GameScene::Update() {
 	case Phase::kPlay:
 		skyDome_->Update();
 		player_->Update();
+		goal_->Update();
 
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
@@ -147,7 +156,7 @@ void GameScene::Update() {
 			}
 		}
 
-		//クリックした場所にブロックを設置
+		// クリックした場所にブロックを設置
 		NewGenerateBlock();
 
 		CheckAllCollisions();
@@ -211,26 +220,28 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-		skyDome_->Draw();
-		for (Enemy* enemy : enemies_) {
-			enemy->Draw();
-		}
+	skyDome_->Draw();
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 
-	    if (player_) {
-		    player_->Draw();
-	    }
-	
-		if (deathParticles_) {
-			deathParticles_->Draw();
-		}
+	if (player_) {
+		player_->Draw();
+	}
 
-		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-				if (!worldTransformBlock)
-					continue;
-				modelBlock_->Draw(*worldTransformBlock, viewProjection_);
-			}
+	if (deathParticles_) {
+		deathParticles_->Draw();
+	}
+
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
+			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
+	}
+
+	goal_->Draw();
 
 	fade_->Draw(commandList);
 
@@ -279,16 +290,15 @@ void GameScene::GenerateBlocks() {
 	}
 }
 
-void GameScene::NewGenerateBlock() { 
-	//クリックしたマップチップ番号を取得
+void GameScene::NewGenerateBlock() {
+	// クリックしたマップチップ番号を取得
 	if (mapChipField_->ClickPositionIsBlock().x >= 0 && mapChipField_->ClickPositionIsBlock().y >= 0) {
-		//ブロックの生成
+		// ブロックの生成
 		WorldTransform* worldTransform = new WorldTransform();
 		worldTransform->Initialize();
 		worldTransformBlocks_[(uint32_t)mapChipField_->ClickPositionIsBlock().y][(uint32_t)mapChipField_->ClickPositionIsBlock().x] = worldTransform;
 		worldTransformBlocks_[(uint32_t)mapChipField_->ClickPositionIsBlock().y][(uint32_t)mapChipField_->ClickPositionIsBlock().x]->translation_ =
 		    mapChipField_->GetMapChipPositionByIndex((uint32_t)mapChipField_->ClickPositionIsBlock().x, (uint32_t)mapChipField_->ClickPositionIsBlock().y);
-
 	}
 }
 
@@ -320,9 +330,10 @@ void GameScene::CheckAllCollisions() {
 void GameScene::ChangePhase() {
 	switch (phase_) {
 	case GameScene::Phase::kPlay:
-		if (player_->isDead()) {
+		if (player_->isDead() || player_->GetWorldTransform().translation_.y <= 0.0f) {
 			// 死亡演出フェーズに切り替え
 			phase_ = Phase::kDeath;
+			isGameOver_ = true;
 
 			// 自キャラの座標を取得
 			const Vector3& deathParticlePosition = player_->GetWorldPosition();
@@ -339,11 +350,18 @@ void GameScene::ChangePhase() {
 				model_ = nullptr;
 			}
 		}
+		if (player_) {
+			if (player_->IsGoal()) {
+				phase_ = Phase::kDeath;
+				isGoal_ = true;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+			}
+		}
 		break;
 
 	case GameScene::Phase::kDeath:
 		if (deathParticles_ && deathParticles_->IsFinished()) {
-			//パーティクルを削除
+			// パーティクルを削除
 			delete deathParticles_;
 			deathParticles_ = nullptr;
 			delete modelDeathParticle_;
@@ -360,3 +378,7 @@ void GameScene::ChangePhase() {
 }
 
 bool GameScene::IsFinished() const { return finished_; }
+
+bool GameScene::IsGoal() { return isGoal_; }
+
+bool GameScene::IsGameOver() { return isGameOver_; }

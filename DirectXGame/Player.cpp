@@ -52,8 +52,8 @@ void Player::Update() {
 	}
 
 	// デバッグ
-	ImGui::DragFloat3("player.velocity", &velocity_.x, 0.01f);
-	ImGui::DragFloat3("player.position", &worldTransform_.translation_.x, 0.01f);
+	//ImGui::DragFloat3("player.velocity", &velocity_.x, 0.01f);
+	//ImGui::DragFloat3("player.position", &worldTransform_.translation_.x, 0.01f);
 
 	// 行列計算
 	worldTransform_.UpdateMatrix();
@@ -140,11 +140,11 @@ void Player::Move() {
 		// 着地
 		if (landing) {
 			// めりこみ排斥
-			worldTransform_.translation_.y = 2.0f;
+			//worldTransform_.translation_.y = 2.0f;
 			// 摩擦で横方向速度が減衰する
 			velocity_.x *= (1.0f - kAttenuation);
 			// 下方向速度をセット
-			velocity_.y = 0.0f;
+			//velocity_.y = 0.0f;
 			// 接地状態に移行
 			onGround_ = true;
 		}
@@ -208,12 +208,20 @@ void Player::MapCollisionTop(CollisionMapInfo& info) {
 		hit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
+	}
+
 	// 右上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
+	}
+
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
 	}
 
 	// ブロックにヒット？
@@ -256,12 +264,20 @@ void Player::MapCollisionBottom(CollisionMapInfo& info) {
 		hit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
+	}
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
+	}
+
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
 	}
 
 	// ブロックにヒット？
@@ -303,12 +319,20 @@ void Player::MapCollisionLeft(CollisionMapInfo& info) {
 		hit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
+	}
+
 	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
+	}
+
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
 	}
 
 	// ブロックにヒット？
@@ -350,12 +374,21 @@ void Player::MapCollisionRight(CollisionMapInfo& info) {
 		hit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
+	}
+
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
+	}
+
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal_ = true;
 	}
 
 	// ブロックにヒット？
@@ -479,3 +512,5 @@ AABB Player::GetAABB() {
 }
 
 bool Player::isDead() const { return isDead_; }
+
+bool Player::IsGoal() { return isGoal_; }

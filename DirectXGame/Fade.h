@@ -28,6 +28,8 @@ public:
 
 	Status GetStatus();
 
+	bool IsStart();
+
 private:
 	Sprite* sprite_ = nullptr;
 

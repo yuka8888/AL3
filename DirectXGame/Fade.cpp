@@ -74,3 +74,11 @@ bool Fade::IsFinished() const {
 }
 
 Fade::Status Fade::GetStatus() { return status_; }
+
+bool Fade::IsStart() {
+	if (counter_ < duration_) {
+		return true;
+	} else {
+		return false;
+	}
+}

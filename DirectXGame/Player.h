@@ -74,6 +74,8 @@ public:
 		// デスフラグのGetter
 	bool isDead() const;
 
+	bool IsGoal();
+
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 1.9f;
 	static inline const float kHeight = 1.9f;
@@ -88,6 +90,8 @@ private:
 	// デスフラグ
 	bool isDead_ = false;
 
+	bool isGoal_ = false;
+
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
 
@@ -98,7 +102,7 @@ private:
 	static inline const float kAttenuation = 0.2f;
 
 	// 最高速度
-	static inline const float kLimitRunSpeed = 1.0f;
+	static inline const float kLimitRunSpeed = 0.2f;
 
 	// 左右
 	enum class LRDirection {
@@ -122,7 +126,7 @@ private:
 	// 最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 1.0f;
 	// ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 1.5f;
+	static inline const float kJumpAcceleration = 1.0f;
 
 	//着地時の速度減衰率
 	static inline const float kAttenuationLanding = 0.3f;

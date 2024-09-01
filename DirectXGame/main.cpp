@@ -6,6 +6,8 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include "TitleScene.h"
+#include "ClearScene.h"
+#include "GameOverScene.h"
 #include "WinApp.h"
 
 enum class Scene {
@@ -13,11 +15,15 @@ enum class Scene {
 
 	kTitle,
 	kGame,
+	kClear,
+	kGameOver,
 };
 
 Scene scene = Scene::kUnknown;
 TitleScene* titleScene = nullptr;
 GameScene* gameScene = nullptr;
+ClearScene* clearScene = nullptr;
+GameOverScene* gameOverScene = nullptr;
 
 void ChangeScene();
 void UpdateScene();
@@ -37,7 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"GC2A_03_オノセ_ユウカ_AL3");
+	win->CreateGameWindow(L"GC2A_03_オノセ_ユウカ_線を描け");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
@@ -89,9 +95,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
-		//シーン切り替え
+		// シーン切り替え
 		ChangeScene();
-		//現在シーン更新
+		// 現在シーン更新
 		UpdateScene();
 		// 軸表示の更新
 		axisIndicator->Update();
@@ -144,16 +150,55 @@ void ChangeScene() {
 
 	case Scene::kGame:
 		if (gameScene->IsFinished()) {
-			// シーン変更
-			scene = Scene::kTitle;
+
+			// 新シーンの生成と初期化
+			if (gameScene->IsGoal()) {
+				// シーン変更
+				scene = Scene::kClear;
+
+				clearScene = new ClearScene;
+				clearScene->Initialize();
+			} else if (gameScene->IsGameOver()) {
+				// シーン変更
+				scene = Scene::kGameOver;
+
+				gameOverScene = new GameOverScene;
+				gameOverScene->Initialize();
+			}
 			// 旧シーンの解放
 			delete gameScene;
 			gameScene = nullptr;
-			// 新シーンの生成と初期化
+		}
+
+		break;
+
+	case Scene::kClear:
+		if (clearScene->IsFinished()) {
+			//シーン変更
+			scene = Scene::kTitle;
+
+			delete clearScene;
+			clearScene = nullptr;
+
+			//新シーンの生成と初期化
 			titleScene = new TitleScene;
 			titleScene->Initialize();
 		}
 
+		break;
+
+	case Scene::kGameOver:
+		if (gameOverScene->IsFinished()) {
+			// シーン変更
+			scene = Scene::kTitle;
+
+			delete gameOverScene;
+			gameOverScene = nullptr;
+
+			// 新シーンの生成と初期化
+			titleScene = new TitleScene;
+			titleScene->Initialize();
+		}
 		break;
 	}
 }
@@ -166,6 +211,12 @@ void UpdateScene() {
 	case Scene::kGame:
 		gameScene->Update();
 		break;
+	case Scene::kClear:
+		clearScene->Update();
+		break;
+	case Scene::kGameOver:
+		gameOverScene->Update();
+		break;
 	}
 }
 void DrawScene() {
@@ -176,5 +227,12 @@ void DrawScene() {
 	case Scene::kGame:
 		gameScene->Draw();
 		break;
+	case Scene::kClear:
+		clearScene->Draw();
+		break;
+	case Scene::kGameOver:
+		gameOverScene->Draw();
+		break;
+
 	}
 }
